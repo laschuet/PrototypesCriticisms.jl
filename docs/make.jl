@@ -17,6 +17,6 @@ makedocs(;
     pages=["Welcome" => "index.md"],
 )
 
-doctest(FPrototypesCriticismsx)
+doctest(PrototypesCriticisms)
 
 deploydocs(; repo="github.com/laschuet/PrototypesCriticisms.jl", devbranch="main")
