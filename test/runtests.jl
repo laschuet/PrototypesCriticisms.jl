@@ -23,7 +23,5 @@ using Test
             prototypes_criticisms(observed_ranking, [ranking_1 ranking_2], 2, 2)
         @test prototypes == [4, 2]
         @test criticisms == [1, 6]
-        println(prototypes)
-        println(criticisms)
     end
 end
