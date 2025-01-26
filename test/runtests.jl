@@ -23,5 +23,15 @@ using Test
             prototypes_criticisms(observed_ranking, [ranking_1 ranking_2], 2, 2)
         @test prototypes == [4, 2]
         @test criticisms == [1, 6]
+
+        @test prototypes_criticisms(observed_ranking, [ranking_1, ranking_2], 2, 2) ==
+              prototypes_criticisms(observed_ranking, [ranking_1 ranking_2], 2, 2)
+
+        @test_throws ArgumentError prototypes_criticisms(
+            observed_ranking,
+            [ranking_1, ranking_2],
+            length(observed_ranking),
+            1,
+        )
     end
 end
