@@ -12,6 +12,8 @@ using Test
         expected_importances = [52 // 21, 92 // 21, 89 // 21, 97 // 21, 4, 52 // 21]
         computed_importances = importances(observed_ranking, [ranking_1 ranking_2])
         @test isapprox(expected_importances, computed_importances)
+        computed_importances = importances(observed_ranking, [ranking_1, ranking_2])
+        @test isapprox(expected_importances, computed_importances)
 
         expected_importances = [5, 5, 5, 5, 5, 5]
         computed_importances = importances(observed_ranking, observed_ranking)

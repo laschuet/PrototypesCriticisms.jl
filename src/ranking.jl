@@ -24,6 +24,14 @@ function importances(observed_ranking::Vector{Int}, rankings::Matrix{Int})
 end
 
 """
+    importances(observed_ranking, rankings)
+
+Like [`importances`](@ref), but provide a vector of rankings instead of a matrix.
+"""
+importances(observed_ranking::Vector{Int}, rankings::Vector{Vector{Int}}) =
+    importances(observed_ranking, stack(rankings))
+
+"""
     importances(observed_ranking, ranking)
 
 Like [`importances`](@ref), but provide a single ranking for one data feature only.
