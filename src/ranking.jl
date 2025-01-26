@@ -22,3 +22,11 @@ function importances(observed_ranking::Vector{Int}, rankings::Matrix{Int})
     feature_importances_ratio = feature_importances / sum(feature_importances)
     return instance_importances * feature_importances_ratio'
 end
+
+"""
+    importances(observed_ranking, ranking)
+
+Like [`importances`](@ref), but provide a single ranking for one data feature only.
+"""
+importances(observed_ranking::Vector{Int}, ranking::Vector{Int}) =
+    importances(observed_ranking, hcat(ranking))
