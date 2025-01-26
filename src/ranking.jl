@@ -1,17 +1,17 @@
 """
-    feature_importances(observed_ranking, rankings)
+    importances(observed_ranking, rankings)
 
-Compute the feature importances for every data instance.
+Compute the importances for every data instance.
 
 # Arguments
 - `observed_ranking::Vector{Int}`: the originally observed ranking.
 - `rankings::Matrix{Int}`: the rankings per data feature.
 """
-function feature_importances(observed_ranking::Vector{Int}, rankings::Matrix{Int})
+function importances(observed_ranking::Vector{Int}, rankings::Matrix{Int})
     deviations = abs.(observed_ranking .- rankings)
     k = length(observed_ranking)
-    importances = fill(k - 1, k) .- deviations
-    feature_importances = sum(importances, dims=1)
+    instance_importances = fill(k - 1, k) .- deviations
+    feature_importances = sum(instance_importances, dims=1)
 
     # TODO Per feature, there should be two rankings, one that represents the
     # data instances in ascending order, and the other that represents the data
@@ -20,5 +20,5 @@ function feature_importances(observed_ranking::Vector{Int}, rankings::Matrix{Int
     # feature for further processing
 
     feature_importances_ratio = feature_importances / sum(feature_importances)
-    return importances * feature_importances_ratio'
+    return instance_importances * feature_importances_ratio'
 end
