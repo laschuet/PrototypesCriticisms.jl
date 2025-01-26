@@ -15,6 +15,10 @@ function prototypes_criticisms(
     p::Int,
     c::Int,
 )
+    p + c > length(observed_ranking) && throw(
+        ArgumentError("Number of prototypes and criticisms cannot exceed ranking length"),
+    )
+
     # TODO The ranking contains the data instance identifiers, so it is a
     # mapping of index to data instance, i.e., observed_ranking[3] = data
     # instancce at rank 3. However, we need the inverse mapping, i.e., data
