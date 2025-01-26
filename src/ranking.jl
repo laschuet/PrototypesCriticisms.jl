@@ -1,4 +1,11 @@
 """
+    feature_importances(observed_ranking, rankings)
+
+Compute the feature importances for every data instance.
+
+# Arguments
+- `observed_ranking::Vector{Int}`: the originally observed ranking.
+- `rankings::Matrix{Int}`: the rankings per data feature.
 """
 function feature_importances(observed_ranking::Vector{Int}, rankings::Matrix{Int})
     deviations = abs.(observed_ranking .- rankings)
