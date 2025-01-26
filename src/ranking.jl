@@ -20,7 +20,7 @@ function importances(observed_ranking::Vector{Int}, rankings::Matrix{Int})
     # feature for further processing
 
     feature_importances_ratio = feature_importances / sum(feature_importances)
-    return instance_importances * feature_importances_ratio'
+    return vec(instance_importances * feature_importances_ratio')
 end
 
 """
