@@ -18,5 +18,12 @@ using Test
         expected_importances = [5, 5, 5, 5, 5, 5]
         computed_importances = importances(observed_ranking, observed_ranking)
         @test isapprox(expected_importances, computed_importances)
+
+        prototypes, criticisms =
+            prototypes_criticisms(observed_ranking, [ranking_1 ranking_2], 2, 2)
+        @test prototypes == [4, 2]
+        @test criticisms == [1, 6]
+        println(prototypes)
+        println(criticisms)
     end
 end

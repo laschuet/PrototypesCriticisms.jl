@@ -1,4 +1,49 @@
 """
+    prototypes_criticisms(observed_ranking, rankings, p, c)
+
+Find prototypes and criticisms.
+
+# Arguments
+- `observed_ranking::Vector{Int}`: the observed ranking.
+- `rankings::Matrix{Int}`: the rankings per data feature.
+- `p::Int`: the number of protoypes to find.
+- `c::Int`: the number of criticisms to find.
+"""
+function prototypes_criticisms(
+    observed_ranking::Vector{Int},
+    rankings::Matrix{Int},
+    p::Int,
+    c::Int,
+)
+    # TODO The ranking contains the data instance identifiers, so it is a
+    # mapping of index to data instance, i.e., observed_ranking[3] = data
+    # instancce at rank 3. However, we need the inverse mapping, i.e., data
+    # instance mapped to rank
+
+    prototypes = Int[]
+    criticisms = Int[]
+
+    weighted_importances = importances(observed_ranking, rankings)
+    sorted_indices = sortperm(weighted_importances, rev=true)
+    prototypes = sorted_indices[1:p]
+    criticisms = sorted_indices[(end - c + 1):end]
+
+    return prototypes, criticisms
+end
+
+"""
+    prototypes_criticisms(observed_ranking, rankings, p, c)
+
+Like [`prototypes_criticisms`](@ref), but provide a vector of rankings instead of a matrix.
+"""
+prototypes_criticisms(
+    observed_ranking::Vector{Int},
+    rankings::Vector{Vector{Int}},
+    p::Int,
+    c::Int,
+) = prototypes_criticisms(observed_ranking, stack(rankings), p, c)
+
+"""
     importances(observed_ranking, rankings)
 
 Compute the importances for every data instance.
