@@ -32,7 +32,7 @@ function prototypes_criticisms(
     prototypes = sorted_indices[1:p]
     criticisms = sorted_indices[(end - c + 1):end]
 
-    return prototypes, criticisms
+    return observed_ranking[prototypes], observed_ranking[criticisms]
 end
 
 """
