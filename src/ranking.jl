@@ -8,6 +8,11 @@ Find prototypes and criticisms.
 - `rankings::Matrix{Int}`: the rankings per data feature.
 - `p::Int`: the number of protoypes to find.
 - `c::Int`: the number of criticisms to find.
+
+# Notes
+Each ranking contains the data instance identifiers, i.e., every ranking is a
+mapping of indices to data instances, e.g., `observed_ranking[3]` = "data
+instance at rank 3"
 """
 function prototypes_criticisms(
     observed_ranking::Vector{Int},
@@ -18,11 +23,6 @@ function prototypes_criticisms(
     p + c > length(observed_ranking) && throw(
         ArgumentError("Number of prototypes and criticisms cannot exceed ranking length"),
     )
-
-    # TODO The ranking contains the data instance identifiers, so it is a
-    # mapping of index to data instance, i.e., observed_ranking[3] = data
-    # instancce at rank 3. However, we need the inverse mapping, i.e., data
-    # instance mapped to rank
 
     prototypes = Int[]
     criticisms = Int[]
@@ -57,8 +57,17 @@ Compute the importances for every data instance.
 - `rankings::Matrix{Int}`: the rankings per data feature.
 """
 function importances(observed_ranking::Vector{Int}, rankings::Matrix{Int})
-    deviations = abs.(observed_ranking .- rankings)
-    k = length(observed_ranking)
+    # We need the inverse mapping of every ranking, so that data
+    # instances are mapped to indices / ranks. This just allows an easier
+    # comparison.
+    inverse_observed_ranking = sortperm(observed_ranking)
+    inverse_rankings = similar(rankings)
+    for (i, ranking) in enumerate(eachcol(rankings))
+        inverse_rankings[:, i] = sortperm(ranking)
+    end
+
+    deviations = abs.(inverse_observed_ranking .- inverse_rankings)
+    k = length(inverse_observed_ranking)
     instance_importances = fill(k - 1, k) .- deviations
     feature_importances = sum(instance_importances, dims=1)
 

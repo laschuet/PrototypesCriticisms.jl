@@ -1,7 +1,7 @@
 @testset "ranking" begin
     observed_ranking = [1, 2, 3, 4, 5, 6]
     ranking_1 = [2, 1, 3, 4, 6, 5]
-    ranking_2 = [6, 2, 5, 3, 4, 1]
+    ranking_2 = [6, 2, 4, 5, 3, 1]
 
     @testset "importances" begin
         expected_importances = [52 // 21, 92 // 21, 89 // 21, 97 // 21, 84 // 21, 52 // 21]
