@@ -24,9 +24,6 @@ function prototypes_criticisms(
         ArgumentError("Number of prototypes and criticisms cannot exceed ranking length"),
     )
 
-    prototypes = Int[]
-    criticisms = Int[]
-
     weighted_importances = importances(observed_ranking, rankings)
     sorted_indices = sortperm(weighted_importances, rev=true)
     prototypes = sorted_indices[1:p]
