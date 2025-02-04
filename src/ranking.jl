@@ -1,7 +1,7 @@
 """
     prototypes_criticisms(observed_ranking, rankings, p, c)
 
-Find prototypes and criticisms.
+Find prototypes and criticisms based on the data feature importances.
 
 # Arguments
 - `observed_ranking::Vector{Int}`: the observed ranking.
@@ -43,6 +43,35 @@ prototypes_criticisms(
     p::Int,
     c::Int,
 ) = prototypes_criticisms(observed_ranking, stack(rankings), p, c)
+
+"""
+    prototypes_criticisms(observed_ranking::Vector{Int}, D::Matrix, k::Int)
+
+Find prototypes and criticisms based on the clustering of the ranking.
+
+# Arguments
+- `observed_ranking::Vector{Int}`: the observed ranking.
+- `D::Matrix`: the data instances of the ranking.
+- `k::Int`: the number of clusters to find.
+"""
+function prototypes_criticisms(observed_ranking::Vector{Int}, D::Matrix, k::Int)
+    X = view(D, :, observed_ranking)
+    distances = pairwise(Euclidean(), X, dims=2)
+
+    clustering = kmedoids(distances, k)
+    medoid_indices = clustering.medoids
+    ys = clustering.assignments
+
+    prototype_indices = observed_ranking[medoid_indices]
+    criticism_indices = Vector{Int}()
+    for i in unique(ys)
+        v = view(distances, ys .== i, medoid_indices[i])
+        permutation = sortperm(v)[end]
+        push!(criticism_indices, observed_ranking[parentindices(v)[1][permutation]])
+    end
+
+    return prototype_indices, criticism_indices, clustering
+end
 
 """
     importances(observed_ranking, rankings)
