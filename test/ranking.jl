@@ -51,6 +51,7 @@ Random.seed!(42)
         @test prototypes == [5, 16]
         @test criticisms == [12, 14]
 
+        @test_throws ArgumentError prototypes_criticisms([1, 2, 3, 4], [1 2 3], 3)
         @test_throws ErrorException prototypes_criticisms([1, 2, 3], [1 2 3], 3)
     end
 end

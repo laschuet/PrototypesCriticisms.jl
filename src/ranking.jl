@@ -51,10 +51,16 @@ Find prototypes and criticisms based on the clustering of the ranking.
 
 # Arguments
 - `observed_ranking::Vector{Int}`: the observed ranking.
-- `D::Matrix`: the data instances of the ranking.
+- `D::Matrix`: the data instances.
 - `k::Int`: the number of clusters to find.
 """
 function prototypes_criticisms(observed_ranking::Vector{Int}, D::Matrix, k::Int)
+    length(observed_ranking) > size(D, 2) && throw(
+        ArgumentError(
+            "Number of data instances in the ranking must be lesser or equal to the number of data instances in general",
+        ),
+    )
+
     X = view(D, :, observed_ranking)
     distances = pairwise(Euclidean(), X, dims=2)
 
