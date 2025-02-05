@@ -50,5 +50,7 @@ Random.seed!(42)
         @test length(intersect(criticisms, observed_ranking)) > 0
         @test prototypes == [5, 16]
         @test criticisms == [12, 14]
+
+        @test_throws ErrorException prototypes_criticisms([1, 2, 3], [1 2 3], 3)
     end
 end

@@ -59,6 +59,7 @@ function prototypes_criticisms(observed_ranking::Vector{Int}, D::Matrix, k::Int)
     distances = pairwise(Euclidean(), X, dims=2)
 
     clustering = kmedoids(distances, k)
+    any(<(2), clustering.counts) && error("Cluster sizes must be at least 2")
     medoid_indices = clustering.medoids
     ys = clustering.assignments
 
