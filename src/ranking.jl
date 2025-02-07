@@ -81,9 +81,9 @@ function prototypes_criticisms(
     distances::AbstractMatrix,
     k::Int,
 )
-    length(observed_ranking) > size(distances, 2) && throw(
+    length(observed_ranking) != size(distances, 2) && throw(
         ArgumentError(
-            "Number of data instances in the ranking must be lesser or equal to the number of data instances in general",
+            "Number of data instances in the ranking must be equal to the number of data instances in general",
         ),
     )
 
