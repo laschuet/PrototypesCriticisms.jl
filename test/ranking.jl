@@ -1,3 +1,4 @@
+using Distances
 using Random
 
 Random.seed!(42)
@@ -40,7 +41,9 @@ Random.seed!(42)
         observed_ranking = [5, 4, 1, 2, 6, 11, 7, 8, 16, 13, 14, 12]
         D = [2 2 2 2 3 3 3 3 5 5 5 5 7 7 7 7]
         k = 2
-        prototypes, criticisms, clustering = prototypes_criticisms(observed_ranking, D, k)
+        metric = Euclidean()
+        prototypes, criticisms, clustering =
+            prototypes_criticisms(observed_ranking, D, k, metric)
         @test length(clustering.medoids) == k
         @test length(clustering.assignments) == length(observed_ranking)
         @test length(prototypes) == k
@@ -51,6 +54,6 @@ Random.seed!(42)
         @test prototypes == [5, 16]
         @test criticisms == [12, 14]
 
-        @test_throws ArgumentError prototypes_criticisms([1, 2, 3, 4], [1 2 3], 3)
+        @test_throws ArgumentError prototypes_criticisms([1, 2, 3, 4], [1 2 3], 3, metric)
     end
 end

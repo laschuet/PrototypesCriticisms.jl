@@ -53,8 +53,14 @@ Find prototypes and criticisms based on the clustering of the ranking.
 - `observed_ranking::Vector{Int}`: the observed ranking.
 - `D::AbstractMatrix`: the data instances.
 - `k::Int`: the number of clusters to find.
+- `metric::Distances.PreMetric`: the distance metric for computing the distances between the data instances.
 """
-function prototypes_criticisms(observed_ranking::Vector{Int}, D::AbstractMatrix, k::Int)
+function prototypes_criticisms(
+    observed_ranking::Vector{Int},
+    D::AbstractMatrix,
+    k::Int,
+    metric::Distances.PreMetric,
+)
     length(observed_ranking) > size(D, 2) && throw(
         ArgumentError(
             "Number of data instances in the ranking must be lesser or equal to the number of data instances in general",
@@ -62,7 +68,24 @@ function prototypes_criticisms(observed_ranking::Vector{Int}, D::AbstractMatrix,
     )
 
     X = view(D, :, observed_ranking)
-    distances = pairwise(Euclidean(), X, dims=2)
+    distances = pairwise(metric, X, dims=2)
+
+    return prototypes_criticisms(observed_ranking, distances, k)
+end
+
+"""
+Like [`prototypes_criticisms`](@ref), but provide a pre-computed distance matrix instead of a matrix of data instances and a distance metric.
+"""
+function prototypes_criticisms(
+    observed_ranking::Vector{Int},
+    distances::AbstractMatrix,
+    k::Int,
+)
+    length(observed_ranking) > size(distances, 2) && throw(
+        ArgumentError(
+            "Number of data instances in the ranking must be lesser or equal to the number of data instances in general",
+        ),
+    )
 
     clustering = kmedoids(distances, k)
     medoid_indices = clustering.medoids
