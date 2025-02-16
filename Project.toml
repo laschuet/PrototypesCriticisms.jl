@@ -3,9 +3,10 @@ uuid = "0da5244b-1e5a-4dd7-894f-664ec4352761"
 authors = ["Lars Schütz"]
 version = "0.5.1"
 
-[compat]
-julia = "1.10.8"
-
 [deps]
 Clustering = "aaaa29a8-35af-508c-8bc3-b662a17a0fe5"
 Distances = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
+
+[compat]
+Clustering = "0.15"
+julia = "1.10.8"
