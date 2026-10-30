@@ -83,15 +83,11 @@ The remaining arguments are:
 """
 function criticisms end
 
-function criticisms(x::AbstractVector, k::Kernel, protos::AbstractVector{Int}, c::Int = 1)
-    K = kernelmatrix(k, x)
-    return criticisms(K, protos, c)
-end
+criticisms(x::AbstractVector, k::Kernel, protos::AbstractVector{Int}, c::Int = 1) =
+    criticisms(kernelmatrix(k, x), protos, c)
 
-function criticisms(X::AbstractMatrix{<:Real}, k::Kernel, protos::AbstractVector{Int}, c::Int = 1)
-    K = kernelmatrix(k, X, obsdim = 2)
-    return criticisms(K, protos, c)
-end
+criticisms(X::AbstractMatrix{<:Real}, k::Kernel, protos::AbstractVector{Int}, c::Int = 1) =
+    criticisms(kernelmatrix(k, X, obsdim = 2), protos, c)
 
 function criticisms(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int}, c::Int = 1)
     initial_candidates = setdiff(1:size(K, 2), protos)
