@@ -40,6 +40,8 @@ Compute prototypes following the MMD-critic method.
 - `p::Int`: the number of prototypes to compute.
 """
 function prototypes(K::AbstractMatrix{<:Real}, p::Int = 1)
+    n = size(K, 1)
+    1 <= p <= n || throw(ArgumentError("p must satisfy 1 <= p <= $n, got p = $p"))
     doubled_kernel_means = 2 * mean(K, dims = 1)
     kernel_diag = diag(K)
     initial_candidates = 1:size(K, 2)
