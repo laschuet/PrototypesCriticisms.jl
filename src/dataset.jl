@@ -9,10 +9,8 @@ Compute prototypes and criticisms following the MMD-critic method.
 - `p::Int`: the number of prototypes to compute.
 - `c::Int`: the number of criticisms to compute.
 """
-function prototypes_criticisms(x::AbstractVector, k::Kernel, p::Int = 1, c::Int = 1)
-    K = kernelmatrix(k, x)
-    return prototypes_criticisms(K, p, c)
-end
+prototypes_criticisms(x::AbstractVector, k::Kernel, p::Int = 1, c::Int = 1) =
+    prototypes_criticisms(kernelmatrix(k, x), p, c)
 
 """
 	prototypes_criticisms(X, k, p, c)
@@ -25,10 +23,8 @@ Compute prototypes and criticisms following the MMD-critic method.
 - `p::Int`: the number of prototypes to compute.
 - `c::Int`: the number of criticisms to compute.
 """
-function prototypes_criticisms(X::AbstractMatrix{<:Real}, k::Kernel, p::Int = 1, c::Int = 1)
-    K = kernelmatrix(k, X, obsdim = 2)
-    return prototypes_criticisms(K, p, c)
-end
+prototypes_criticisms(X::AbstractMatrix{<:Real}, k::Kernel, p::Int = 1, c::Int = 1) =
+    prototypes_criticisms(kernelmatrix(k, X, obsdim = 2), p, c)
 
 """
 	prototypes_criticisms(K, p, c)
