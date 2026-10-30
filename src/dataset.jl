@@ -26,6 +26,20 @@ Compute prototypes following the MMD-critic method.
 - `p::Int`: the number of prototypes to compute.
 """
 function prototypes(X::AbstractMatrix{<:Real}, k::Kernel, p::Int = 1)
+    K = kernelmatrix(k, X, obsdim = 2)
+    return prototypes(K, p)
+end
+
+"""
+	prototypes(K, p)
+
+Compute prototypes following the MMD-critic method.
+
+# Arguments
+- `K::AbstractMatrix{<:Real}`: the kernel matrix.
+- `p::Int`: the number of prototypes to compute.
+"""
+function prototypes(K::AbstractMatrix{<:Real}, p::Int = 1)
     protos = Int[]
     while length(protos) < p
         push!(protos, length(protos) + 1)
