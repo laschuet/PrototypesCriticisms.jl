@@ -97,6 +97,38 @@ function prototypes(K::AbstractMatrix{<:Real}, p::Int = 1)
 end
 
 """
+	criticisms(x, k, protos, c)
+
+Compute criticisms following the MMD-critic method.
+
+# Arguments
+- `x::AbstractVector`: the observations, e.g., a vector of vectors or a vector of numbers for one-dimensional data.
+- `k::Kernel`: the kernel function.
+- `protos::AbstractVector{Int}`: the prototypes.
+- `c::Int`: the number of criticisms to compute.
+"""
+function criticisms(x::AbstractVector, k::Kernel, protos::AbstractVector{Int}, c::Int = 1)
+    K = kernelmatrix(k, x)
+    return criticisms(K, protos, c)
+end
+
+"""
+	criticisms(X, k, protos, c)
+
+Compute criticisms following the MMD-critic method.
+
+# Arguments
+- `X::AbstractMatrix{<:Real}`: the data matrix, with one observation per column.
+- `k::Kernel`: the kernel function.
+- `protos::AbstractVector{Int}`: the prototypes.
+- `c::Int`: the number of criticisms to compute.
+"""
+function criticisms(X::AbstractMatrix{<:Real}, k::Kernel, protos::AbstractVector{Int}, c::Int = 1)
+    K = kernelmatrix(k, X, obsdim = 2)
+    return criticisms(K, protos, c)
+end
+
+"""
 	criticisms(K, protos, c)
 
 Compute criticisms following the MMD-critic method.
