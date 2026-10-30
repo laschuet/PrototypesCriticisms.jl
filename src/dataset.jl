@@ -1,29 +1,31 @@
 """
-	prototypes_criticisms(X, p, c)
+	prototypes_criticisms(X, k, p, c)
 
 Compute prototypes and criticisms following the MMD-critic method.
 
 # Arguments
 - `X::AbstractMatrix{<:Real}`: the data.
+- `k::Kernel`: the kernel function.
 - `p::Int`: the number of prototypes to compute.
 - `c::Int`: the number of criticisms to compute.
 """
-function prototypes_criticisms(X::AbstractMatrix{<:Real}, p::Int = 1, c::Int = 1)
-    protos = prototypes(X, p)
+function prototypes_criticisms(X::AbstractMatrix{<:Real}, k::Kernel, p::Int = 1, c::Int = 1)
+    protos = prototypes(X, k, p)
     critics = criticisms(X, protos, c)
     return protos, critics
 end
 
 """
-	prototypes(X, p)
+	prototypes(X, k, p)
 
 Compute prototypes following the MMD-critic method.
 
 # Arguments
 - `X::AbstractMatrix{<:Real}`: the data.
+- `k::Kernel`: the kernel function.
 - `p::Int`: the number of prototypes to compute.
 """
-function prototypes(X::AbstractMatrix{<:Real}, p::Int = 1)
+function prototypes(X::AbstractMatrix{<:Real}, k::Kernel, p::Int = 1)
     protos = Int[]
     while length(protos) < p
         push!(protos, length(protos) + 1)

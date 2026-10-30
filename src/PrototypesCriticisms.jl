@@ -2,6 +2,7 @@ module PrototypesCriticisms
 
 using Clustering
 using Distances
+using KernelFunctions
 
 export importances, prototypes_criticisms
 
