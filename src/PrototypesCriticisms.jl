@@ -3,6 +3,7 @@ module PrototypesCriticisms
 using Clustering
 using Distances
 using KernelFunctions
+using LinearAlgebra
 using Statistics
 
 export importances, prototypes_criticisms

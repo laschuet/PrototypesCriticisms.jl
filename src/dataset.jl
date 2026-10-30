@@ -41,12 +41,13 @@ Compute prototypes following the MMD-critic method.
 """
 function prototypes(K::AbstractMatrix{<:Real}, p::Int = 1)
     doubled_kernel_means = 2 * mean(K, dims = 1)
+    kernel_diag = diag(K)
     initial_candidates = 1:size(K, 2)
     protos = Int[]
     while length(protos) < p
         candidates = setdiff(initial_candidates, protos)
         avgproximities1 = vec(doubled_kernel_means[candidates])
-        proximities2 = vec(2 * sum(K[protos, candidates], dims = 1))
+        proximities2 = vec(2 * sum(K[protos, candidates], dims = 1)) + kernel_diag[candidates]
         avgproximities2 = proximities2 / (length(protos) + 1)
         diffs = avgproximities1 - avgproximities2
         proto = candidates[argmax(diffs)]
