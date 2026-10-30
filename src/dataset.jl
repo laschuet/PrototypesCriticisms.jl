@@ -37,7 +37,7 @@ Compute prototypes following the MMD-critic method.
 
 # Arguments
 - `K::AbstractMatrix{<:Real}`: the kernel matrix.
-- `p::Int`: the number of prototypes to compute.
+- `p::Int`: the number of prototypes to compute, with `1 <= p <= size(K, 1)`.
 """
 function prototypes(K::AbstractMatrix{<:Real}, p::Int = 1)
     n = size(K, 1)
