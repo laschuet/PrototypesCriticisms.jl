@@ -1,4 +1,7 @@
 """
+	prototypes_criticisms(X, p, c)
+
+Compute prototypes and criticisms following the MMD-critic method.
 """
 function prototypes_criticisms(X::AbstractMatrix{<:Real}, p::Int = 1, c::Int = 1)
     protos = prototypes(X, p)
@@ -7,6 +10,9 @@ function prototypes_criticisms(X::AbstractMatrix{<:Real}, p::Int = 1, c::Int = 1
 end
 
 """
+	prototypes(X, p)
+
+Compute prototypes following the MMD-critic method.
 """
 function prototypes(X::AbstractMatrix{<:Real}, p::Int = 1)
     protos = Int[]
@@ -17,6 +23,9 @@ function prototypes(X::AbstractMatrix{<:Real}, p::Int = 1)
 end
 
 """
+	criticisms(X, protos, c)
+
+Compute criticisms following the MMD-critic method.
 """
 function criticisms(X::AbstractMatrix{<:Real}, protos::AbstractVector{Int}, c::Int = 1)
     initial_candidates = setdiff(1:size(X, 2), protos)
