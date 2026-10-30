@@ -97,17 +97,17 @@ function prototypes(K::AbstractMatrix{<:Real}, p::Int = 1)
 end
 
 """
-	criticisms(X, protos, c)
+	criticisms(K, protos, c)
 
 Compute criticisms following the MMD-critic method.
 
 # Arguments
-- `X::AbstractMatrix{<:Real}`: the data.
+- `K::AbstractMatrix{<:Real}`: the kernel matrix.
 - `protos::AbstractVector{Int}`: the prototypes.
 - `c::Int`: the number of criticisms to compute.
 """
-function criticisms(X::AbstractMatrix{<:Real}, protos::AbstractVector{Int}, c::Int = 1)
-    initial_candidates = setdiff(1:size(X, 2), protos)
+function criticisms(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int}, c::Int = 1)
+    initial_candidates = setdiff(1:size(K, 2), protos)
     critics = Int[]
     while length(critics) < c
         candidates = setdiff(initial_candidates, critics)
