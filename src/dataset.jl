@@ -41,6 +41,7 @@ Compute prototypes following the MMD-critic method.
 """
 function prototypes(K::AbstractMatrix{<:Real}, p::Int = 1)
     n = size(K, 1)
+    size(K, 2) == n || throw(DimensionMismatch("K must be square, got siz $(size(K))"))
     1 <= p <= n || throw(ArgumentError("p must satisfy 1 <= p <= $n, got p = $p"))
     doubled_kernel_means = 2 * mean(K, dims = 1)
     kernel_diag = diag(K)
