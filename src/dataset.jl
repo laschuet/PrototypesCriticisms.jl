@@ -54,16 +54,18 @@ function prototypes(K::AbstractMatrix{<:Real}, p::Int = 1)
     1 <= p <= n || throw(ArgumentError("p must satisfy 1 <= p <= $n, got p = $p"))
     doubled_kernel_means = 2 * mean(K, dims = 1)
     kernel_diag = diag(K)
-    initial_candidates = 1:size(K, 2)
+    initial_candidates = 1:n
+    protos_proximities = zeros(eltype(K), n)
     protos = Int[]
     while length(protos) < p
         candidates = setdiff(initial_candidates, protos)
         avgproximities1 = vec(doubled_kernel_means[candidates])
-        proximities2 = vec(2 * sum(K[protos, candidates], dims = 1)) + kernel_diag[candidates]
+        proximities2 = 2 * protos_proximities[candidates] + kernel_diag[candidates]
         avgproximities2 = proximities2 / (length(protos) + 1)
         diffs = avgproximities1 - avgproximities2
         proto = candidates[argmax(diffs)]
         push!(protos, proto)
+        protos_proximities += K[:, proto]
     end
     return protos
 end
