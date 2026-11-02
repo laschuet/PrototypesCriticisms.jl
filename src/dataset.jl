@@ -3,7 +3,8 @@
     prototypes_criticisms(X, k, p=1, c=1)
     prototypes_criticisms(K, p=1, c=1)
 
-Compute prototypes and criticisms following the MMD-critic method.
+Compute prototypes and criticisms following the MMD-critic method and return
+a tuple of the indices of the prototypes and the indices of the criticisms.
 
 The data can be given in the following forms:
 - `x::AbstractVector`: a vector of observations, e.g., a vector of vectors or a vector of numbers for one-dimensional data.
@@ -33,7 +34,7 @@ end
     prototypes(X, k, p=1)
     prototypes(K, p=1)
 
-Compute prototypes following the MMD-critic method.
+Compute prototypes following the MMD-critic method and return their indices.
 
 The data `x`, `X`, or `K` and the kernel `k` are as in [`prototypes_criticisms`](@ref).
 
@@ -74,7 +75,7 @@ end
     criticisms(X, k, protos, c=1)
     criticisms(K, protos, c=1)
 
-Compute criticisms following the MMD-critic method.
+Compute criticisms following the MMD-critic method and return their indices.
 
 The data `x`, `X`, or `K` and the kernel `k` are as in [`prototypes_criticisms`](@ref).
 
