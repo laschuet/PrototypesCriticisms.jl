@@ -1,7 +1,7 @@
 """
-    prototypes_criticisms(x, k, p, c)
-    prototypes_criticisms(X, k, p, c)
-    prototypes_criticisms(K, p, c)
+    prototypes_criticisms(x, k, p=1, c=1)
+    prototypes_criticisms(X, k, p=1, c=1)
+    prototypes_criticisms(K, p=1, c=1)
 
 Compute prototypes and criticisms following the MMD-critic method.
 
@@ -29,9 +29,9 @@ function prototypes_criticisms(K::AbstractMatrix{<:Real}, p::Int = 1, c::Int = 1
 end
 
 """
-    prototypes(x, k, p)
-    prototypes(X, k, p)
-    prototypes(K, p)
+    prototypes(x, k, p=1)
+    prototypes(X, k, p=1)
+    prototypes(K, p=1)
 
 Compute prototypes following the MMD-critic method.
 
@@ -69,9 +69,9 @@ function prototypes(K::AbstractMatrix{<:Real}, p::Int = 1)
 end
 
 """
-    criticisms(x, k, protos, c)
-    criticisms(X, k, protos, c)
-    criticisms(K, protos, c)
+    criticisms(x, k, protos, c=1)
+    criticisms(X, k, protos, c=1)
+    criticisms(K, protos, c=1)
 
 Compute criticisms following the MMD-critic method.
 
