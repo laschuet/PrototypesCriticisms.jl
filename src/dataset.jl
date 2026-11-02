@@ -50,9 +50,7 @@ prototypes(x::AbstractVector, k::Kernel, p::Int = 1) = prototypes(kernelmatrix(k
 prototypes(X::AbstractMatrix{<:Real}, k::Kernel, p::Int = 1) = prototypes(kernelmatrix(k, X, obsdim = 2), p)
 
 function prototypes(K::AbstractMatrix{<:Real}, p::Int = 1)
-    n = size(K, 1)
-    size(K, 2) == n || throw(DimensionMismatch("K must be square, got size $(size(K))"))
-    issymmetric(K) || throw(ArgumentError("K must be symmetric"))
+    n = check_kernelmatrix(K)
     1 <= p <= n || throw(ArgumentError("p must satisfy 1 <= p <= $n, got p = $p"))
     doubled_kernel_means = 2 * mean(K, dims = 1)
     kernel_diag = diag(K)
@@ -92,6 +90,7 @@ criticisms(X::AbstractMatrix{<:Real}, k::Kernel, protos::AbstractVector{Int}, c:
     criticisms(kernelmatrix(k, X, obsdim = 2), protos, c)
 
 function criticisms(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int}, c::Int = 1)
+    n = check_kernelmatrix(K)
     initial_candidates = setdiff(1:size(K, 2), protos)
     critics = Int[]
     while length(critics) < c
@@ -99,4 +98,16 @@ function criticisms(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int}, c::I
         push!(critics, candidates[1])
     end
     return critics
+end
+
+"""
+	check_kernelmatrix(K)
+
+TODO.
+"""
+function check_kernelmatrix(K::AbstractMatrix{<:Real})
+    n = size(K, 1)
+    size(K, 2) == n || throw(DimensionMismatch("K must be square, got size $(size(K))"))
+    issymmetric(K) || throw(ArgumentError("K must be symmetric"))
+    return n
 end
