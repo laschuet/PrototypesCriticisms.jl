@@ -91,7 +91,7 @@ criticisms(X::AbstractMatrix{<:Real}, k::Kernel, protos::AbstractVector{Int}, c:
 
 function criticisms(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int}, c::Int = 1)
     n = check_kernelmatrix(K)
-    initial_candidates = setdiff(1:size(K, 2), protos)
+    initial_candidates = setdiff(1:n, protos)
     critics = Int[]
     while length(critics) < c
         candidates = setdiff(initial_candidates, critics)
