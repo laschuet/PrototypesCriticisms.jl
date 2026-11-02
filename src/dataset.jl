@@ -103,9 +103,16 @@ function criticisms(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int}, c::I
 end
 
 """
-    mmd2(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int})
+    mmd2(x, k, protos)
+    mmd2(X, k, protos)
+    mmd2(K, protos)
 
-Compute the squared maximum mean discrepancy (MMD).
+Compute the squared maximum mean discrepancy (MMD) between the data and prototypes.
+
+The data `x`, `X`, or `K` and the kernel `k` are as in [`prototypes_criticisms`](@ref).
+
+The remaining argument is:
+- `protos::AbstractVector{Int}`: the prototypes, e.g., as returned by [`prototypes`](@ref).
 """
 function mmd2 end
 
