@@ -40,7 +40,8 @@ The data `x`, `X`, or `K` and the kernel `k` are as in [`prototypes_criticisms`]
 The remaining argument is:
 - `p::Int`: the number of prototypes to compute, with `1 <= p <= n` for `n` observations.
 
-See also [`criticisms`](@ref)."""
+See also [`criticisms`](@ref).
+"""
 function prototypes end
 
 prototypes(x::AbstractVector, k::Kernel, p::Int = 1) = prototypes(kernelmatrix(k, x), p)
