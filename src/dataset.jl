@@ -130,7 +130,7 @@ function mmd2(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int})
 end
 
 """
-	check_kernelmatrix(K)
+    check_kernelmatrix(K)
 
 Check that the matrix `K` is square and symmetric, and return the number
 of observations.
