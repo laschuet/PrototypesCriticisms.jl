@@ -103,6 +103,17 @@ function criticisms(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int}, c::I
 end
 
 """
+    mmd2(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int})
+
+Compute the squared maximum mean discrepancy (MMD).
+"""
+function mmd2(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int})
+    n = size(K, 2)
+    p = length(protos)
+    return sum(K) / (n * n) - 2 * sum(K[:, protos]) / (n * p) + sum(K[protos, protos]) / (p * p)
+end
+
+"""
 	check_kernelmatrix(K)
 
 Check that the matrix `K` is square and symmetric, and return the number
