@@ -103,7 +103,8 @@ end
 """
 	check_kernelmatrix(K)
 
-TODO.
+Check that the matrix `K` is square and symmetric, and return the number
+of observations.
 """
 function check_kernelmatrix(K::AbstractMatrix{<:Real})
     n = size(K, 1)
