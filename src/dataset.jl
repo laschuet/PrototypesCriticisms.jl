@@ -9,7 +9,7 @@ a tuple of the indices of the prototypes and the indices of the criticisms.
 The data can be given in the following forms:
 - `x::AbstractVector`: a vector of observations, e.g., a vector of vectors or a vector of numbers for one-dimensional data.
 - `X::AbstractMatrix{<:Real}`: a data matrix, with one observation per column.
-- `K::AbstractMatrix{<:Real}`: a precomputed kernel matrix.
+- `K::AbstractMatrix{<:Real}`: a precomputed kernel matrix. Only squareness and symmetry are checked.
 
 For `x` and `X`, the kernel matrix is computed with the kernel function `k`.
 
