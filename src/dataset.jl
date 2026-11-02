@@ -108,7 +108,7 @@ end
 Compute the squared maximum mean discrepancy (MMD).
 """
 function mmd2(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int})
-    n = size(K, 2)
+    n = check_kernelmatrix(K)
     p = length(protos)
     return sum(K) / (n * n) - 2 * sum(K[:, protos]) / (n * p) + sum(K[protos, protos]) / (p * p)
 end
