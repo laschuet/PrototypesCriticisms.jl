@@ -15,7 +15,8 @@ The data can be given in the following forms:
 
 For `x` and `X`, the kernel matrix is computed with the kernel function `k`.
 
-The numbers of prototypes `p` and criticisms `c` are passed on to [`prototypes`](@ref) and [`criticisms`](@ref).
+The numbers of prototypes `p` and criticisms `c` are passed on to [`prototypes`](@ref) and
+[`criticisms`](@ref).
 """
 function prototypes_criticisms end
 
