@@ -27,7 +27,7 @@ Random.seed!(42)
         @test criticisms == [11, 66]
 
         @test prototypes_criticisms(observed_ranking, [ranking_1, ranking_2], 2, 2) ==
-              prototypes_criticisms(observed_ranking, [ranking_1 ranking_2], 2, 2)
+            prototypes_criticisms(observed_ranking, [ranking_1 ranking_2], 2, 2)
 
         @test_throws ArgumentError prototypes_criticisms(
             observed_ranking,
