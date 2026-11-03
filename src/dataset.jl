@@ -133,6 +133,12 @@ function mmd2(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int})
         sum(K[protos, protos]) / (p * p)
 end
 
+function witness(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int})
+    check_kernelmatrix(K)
+    isempty(protos) && throw(ArgumentError("protos must not be empty"))
+    return vec(mean(K, dims = 1) - mean(K[protos, :], dims = 1))
+end
+
 """
     check_kernelmatrix(K)
 
