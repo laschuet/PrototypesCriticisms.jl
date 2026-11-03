@@ -8,8 +8,8 @@ using Statistics
 
 export criticisms, importances, mmd2, prototypes, prototypes_criticisms
 
-include("dataset.jl")
 include("clustering.jl")
+include("dataset.jl")
 include("ranking.jl")
 
 end
