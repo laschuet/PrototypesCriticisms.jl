@@ -126,11 +126,9 @@ mmd2(X::AbstractMatrix{<:Real}, k::Kernel, protos::AbstractVector{Int}) =
     mmd2(kernelmatrix(k, X, obsdim = 2), protos)
 
 function mmd2(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int})
-    n = check_kernelmatrix(K)
+    check_kernelmatrix(K)
     isempty(protos) && throw(ArgumentError("protos must not be empty"))
-    p = length(protos)
-    return sum(K) / (n * n) - 2 * sum(K[:, protos]) / (n * p) +
-        sum(K[protos, protos]) / (p * p)
+    return mean(K) - 2 * mean(K[:, protos]) + mean(K[protos, protos])
 end
 
 """
