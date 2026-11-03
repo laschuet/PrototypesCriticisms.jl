@@ -15,17 +15,17 @@ mapping of indices to data instances, e.g., `observed_ranking[3]` = "data
 instance at rank 3"
 """
 function prototypes_criticisms(
-    observed_ranking::Vector{Int},
-    rankings::Matrix{Int},
-    p::Int,
-    c::Int,
-)
+        observed_ranking::Vector{Int},
+        rankings::Matrix{Int},
+        p::Int,
+        c::Int,
+    )
     p + c > length(observed_ranking) && throw(
         ArgumentError("Number of prototypes and criticisms cannot exceed ranking length"),
     )
 
     weighted_importances = importances(observed_ranking, rankings)
-    sorted_indices = sortperm(weighted_importances, rev=true)
+    sorted_indices = sortperm(weighted_importances, rev = true)
     prototypes = sorted_indices[1:p]
     criticisms = sorted_indices[(end - c + 1):end]
 
@@ -56,11 +56,11 @@ Find prototypes and criticisms based on the clustering of the ranking.
 - `metric::Distances.PreMetric`: the distance metric for computing the distances between the data instances.
 """
 function prototypes_criticisms(
-    observed_ranking::Vector{Int},
-    D::AbstractMatrix,
-    k::Int,
-    metric::Distances.PreMetric,
-)
+        observed_ranking::Vector{Int},
+        D::AbstractMatrix,
+        k::Int,
+        metric::Distances.PreMetric,
+    )
     length(observed_ranking) > size(D, 2) && throw(
         ArgumentError(
             "Number of data instances in the ranking must be lesser or equal to the number of data instances in general",
@@ -68,7 +68,7 @@ function prototypes_criticisms(
     )
 
     X = view(D, :, observed_ranking)
-    distances = pairwise(metric, X, dims=2)
+    distances = pairwise(metric, X, dims = 2)
 
     return prototypes_criticisms(observed_ranking, distances, k)
 end
@@ -77,10 +77,10 @@ end
 Like [`prototypes_criticisms`](@ref), but provide a pre-computed distance matrix instead of a matrix of data instances and a distance metric.
 """
 function prototypes_criticisms(
-    observed_ranking::Vector{Int},
-    distances::AbstractMatrix,
-    k::Int,
-)
+        observed_ranking::Vector{Int},
+        distances::AbstractMatrix,
+        k::Int,
+    )
     length(observed_ranking) != size(distances, 2) && throw(
         ArgumentError(
             "Number of data instances in the ranking must be equal to the number of data instances in general",
@@ -124,7 +124,7 @@ function importances(observed_ranking::Vector{Int}, rankings::Matrix{Int})
     deviations = abs.(inverse_observed_ranking .- inverse_rankings)
     k = length(inverse_observed_ranking)
     instance_importances = fill(k - 1, k) .- deviations
-    feature_importances = sum(instance_importances, dims=1)
+    feature_importances = sum(instance_importances, dims = 1)
 
     # TODO Per feature, there should be two rankings, one that represents the
     # data instances in ascending order, and the other that represents the data
