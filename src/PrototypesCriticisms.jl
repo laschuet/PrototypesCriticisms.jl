@@ -6,7 +6,7 @@ using KernelFunctions
 using LinearAlgebra
 using Statistics
 
-export criticisms, importances, mmd2, prototypes, prototypes_criticisms
+export criticisms, importances, mmd2, prototypes, prototypes_criticisms, witness
 
 include("clustering.jl")
 include("dataset.jl")
