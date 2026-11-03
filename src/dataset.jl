@@ -135,13 +135,17 @@ end
     witness(x, k, protos)
     witness(X, k, protos)
     witness(K, protos)
+    witness(x, k, protos, z)
+    witness(X, k, protos, z)
 
-Compute the witness function for every observation.
+Compute the witness function for every observation, or only at `z` if given.
 
 The data `x`, `X`, or `K` and the kernel `k` are as in [`prototypes_criticisms`](@ref).
 
-The remaining argument is:
+The remaining arguments are:
 - `protos::AbstractVector{Int}`: the prototypes, e.g., as returned by [`prototypes`](@ref).
+- `z`: a single observation, which does not need to be part of the data, e.g., an element of
+    `x` or a column of `X`.
 """
 function witness end
 
@@ -156,6 +160,14 @@ function witness(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int})
     isempty(protos) && throw(ArgumentError("protos must not be empty"))
     return vec(mean(K, dims = 1) - mean(K[protos, :], dims = 1))
 end
+
+function witness(x::AbstractVector, k::Kernel, protos::AbstractVector{Int}, z)
+    isempty(protos) && throw(ArgumentError("protos must not be empty"))
+    return mean(xi -> k(xi, z), x) - mean(xi -> k(xi, z), x[protos])
+end
+
+witness(X::AbstractMatrix{<:Real}, k::Kernel, protos::AbstractVector{Int}, z) =
+    witness(eachcol(X), k, protos, z)
 
 """
     check_kernelmatrix(K)
