@@ -134,15 +134,25 @@ function mmd2(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int})
 end
 
 """
+    witness(x, k, protos)
+    witness(X, k, protos)
     witness(K, protos)
 
 Compute the witness function for every observation.
 
-The kernel matrix `K` is as in [`prototypes_criticisms`](@ref).
+The data `x`, `X`, or `K` and the kernel `k` are as in [`prototypes_criticisms`](@ref).
 
 The remaining argument is:
 - `protos::AbstractVector{Int}`: the prototypes, e.g., as returned by [`prototypes`](@ref).
 """
+function witness end
+
+witness(x::AbstractVector, k::Kernel, protos::AbstractVector{Int}) =
+    witness(kernelmatrix(k, x), protos)
+
+witness(X::AbstractMatrix{<:Real}, k::Kernel, protos::AbstractVector{Int}) =
+    witness(kernelmatrix(k, X, obsdim = 2), protos)
+
 function witness(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int})
     check_kernelmatrix(K)
     isempty(protos) && throw(ArgumentError("protos must not be empty"))
