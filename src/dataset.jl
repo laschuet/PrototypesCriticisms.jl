@@ -7,9 +7,11 @@ Compute prototypes and criticisms following the MMD-critic method and return
 a tuple of the indices of the prototypes and the indices of the criticisms.
 
 The data can be given in the following forms:
-- `x::AbstractVector`: a vector of observations, e.g., a vector of vectors or a vector of numbers for one-dimensional data.
+- `x::AbstractVector`: a vector of observations, e.g., a vector of vectors or a vector of
+    numbers for one-dimensional data.
 - `X::AbstractMatrix{<:Real}`: a data matrix, with one observation per column.
-- `K::AbstractMatrix{<:Real}`: a precomputed kernel matrix. Only squareness and symmetry are checked.
+- `K::AbstractMatrix{<:Real}`: a precomputed kernel matrix. Only squareness and symmetry are
+    checked.
 
 For `x` and `X`, the kernel matrix is computed with the kernel function `k`.
 
@@ -47,7 +49,8 @@ function prototypes end
 
 prototypes(x::AbstractVector, k::Kernel, p::Int = 1) = prototypes(kernelmatrix(k, x), p)
 
-prototypes(X::AbstractMatrix{<:Real}, k::Kernel, p::Int = 1) = prototypes(kernelmatrix(k, X, obsdim = 2), p)
+prototypes(X::AbstractMatrix{<:Real}, k::Kernel, p::Int = 1) =
+    prototypes(kernelmatrix(k, X, obsdim = 2), p)
 
 function prototypes(K::AbstractMatrix{<:Real}, p::Int = 1)
     n = check_kernelmatrix(K)
@@ -126,14 +129,14 @@ function mmd2(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int})
     n = check_kernelmatrix(K)
     isempty(protos) && throw(ArgumentError("protos must not be empty"))
     p = length(protos)
-    return sum(K) / (n * n) - 2 * sum(K[:, protos]) / (n * p) + sum(K[protos, protos]) / (p * p)
+    return sum(K) / (n * n) - 2 * sum(K[:, protos]) / (n * p) +
+        sum(K[protos, protos]) / (p * p)
 end
 
 """
     check_kernelmatrix(K)
 
-Check that the matrix `K` is square and symmetric, and return the number
-of observations.
+Check that the matrix `K` is square and symmetric, and return the number of observations.
 """
 function check_kernelmatrix(K::AbstractMatrix{<:Real})
     n = size(K, 1)
