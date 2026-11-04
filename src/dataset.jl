@@ -98,10 +98,13 @@ criticisms(X::AbstractMatrix{<:Real}, k::Kernel, protos::AbstractVector{Int}, c:
 function criticisms(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int}, c::Int = 1)
     n = check_kernelmatrix(K)
     initial_candidates = setdiff(1:n, protos)
+    abs_witnesses = abs.(witness(K, protos))
     critics = Int[]
     while length(critics) < c
         candidates = setdiff(initial_candidates, critics)
-        push!(critics, candidates[1])
+        scores = abs_witnesses[candidates]
+        critic = candidates[argmax(scores)]
+        push!(critics, critic)
     end
     return critics
 end
