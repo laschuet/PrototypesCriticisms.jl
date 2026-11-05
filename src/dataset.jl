@@ -85,7 +85,8 @@ The data `x`, `X`, or `K` and the kernel `k` are as in [`prototypes_criticisms`]
 
 The remaining arguments are:
 - `protos::AbstractVector{Int}`: the prototypes, e.g., as returned by [`prototypes`](@ref).
-- `c::Int`: the number of criticisms to compute.
+- `c::Int`: the number of criticisms to compute, with `1 <= c <= n - p` for `n` observations
+    and `p` distinct prototypes.
 """
 function criticisms end
 
@@ -98,6 +99,8 @@ criticisms(X::AbstractMatrix{<:Real}, k::Kernel, protos::AbstractVector{Int}, c:
 function criticisms(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int}, c::Int = 1)
     n = check_kernelmatrix(K)
     initial_candidates = setdiff(1:n, protos)
+    max_c = length(initial_candidates)
+    1 <= c <= max_c || throw(ArgumentError("c must satisfy 1 <= c <= $max_c, got c = $c"))
     abs_witnesses = abs.(witness(K, protos))
     critics = Int[]
     while length(critics) < c
