@@ -29,6 +29,12 @@ using KernelFunctions
 
         @test witness(x, k, [1, 2]) == witness(x, k, [2, 1])
 
+        # For a linear kernel, witness at z is z times the difference between the means
+        @test isapprox(witness(x, k, [1]), (4.5 - 1) * x)
+        @test isapprox(witness(x, k, [1, 2]), (4.5 - 1.5) * x)
+        @test isapprox(witness(x, k, [1, 6]), zero(x))
+        @test isapprox(witness(x, k, [1], 2), (4.5 - 1) * 2)
+
         @test_throws ArgumentError witness(x, k, Int[])
         @test_throws ArgumentError witness(x, k, Int[], 1)
     end
