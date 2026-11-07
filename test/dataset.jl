@@ -10,5 +10,7 @@ using KernelFunctions
         @test isapprox(mmd2(X, k, eachindex(eachcol(X))), 0)
 
         @test mmd2(x, k, [1, 2]) == mmd2(x, k, [2, 1])
+
+        @test_throws ArgumentError mmd2(x, k, Int[])
     end
 end
