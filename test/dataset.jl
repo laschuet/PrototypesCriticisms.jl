@@ -18,4 +18,18 @@ using KernelFunctions
 
         @test_throws ArgumentError mmd2(x, k, Int[])
     end
+
+    @testset "witness" begin
+        x = [1, 2, 3, 6, 7, 8]
+        X = [x x .+ 1]
+        k = LinearKernel()
+
+        @test isapprox(witness(x, k, eachindex(x)), zero(x))
+        @test isapprox(witness(X, k, eachindex(eachcol(X))), zeros(size(X, 2)))
+
+        @test witness(x, k, [1, 2]) == witness(x, k, [2, 1])
+
+        @test_throws ArgumentError witness(x, k, Int[])
+        @test_throws ArgumentError witness(x, k, Int[], 1)
+    end
 end
