@@ -1,4 +1,5 @@
 using KernelFunctions
+using LinearAlgebra
 
 @testset "dataset" begin
     @testset "mmd2" begin
@@ -34,6 +35,11 @@ using KernelFunctions
         @test isapprox(witness(x, k, [1, 2]), (4.5 - 1.5) * x)
         @test isapprox(witness(x, k, [1, 6]), zero(x))
         @test isapprox(witness(x, k, [1], 2), (4.5 - 1) * 2)
+
+        # For a linear kernel, witness at z is dot product of z with difference between the
+        # means
+        @test isapprox(witness(X, k, [1], ones(6)), dot(ones(6), (x .+ 0.5) - x))
+        @test isapprox(witness(X, k, [1], x), dot(x, (x .+ 0.5) - x))
 
         @test_throws ArgumentError witness(x, k, Int[])
         @test_throws ArgumentError witness(x, k, Int[], 1)
