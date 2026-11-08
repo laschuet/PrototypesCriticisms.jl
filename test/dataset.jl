@@ -12,7 +12,7 @@ using LinearAlgebra
 
         @test mmd2(x, k, [1, 2]) == mmd2(x, k, [2, 1])
 
-        # For a linear kernel, mmd2 is the squared distance between the means
+        # Linear kernel: squared distance between the means
         @test mmd2(x, k, [1]) ≈ (4.5 - 1)^2
         @test mmd2(x, k, [1, 2]) ≈ (4.5 - 1.5)^2
         @test mmd2(x, k, [1, 6]) ≈ 0
@@ -30,14 +30,11 @@ using LinearAlgebra
 
         @test witness(x, k, [1, 2]) == witness(x, k, [2, 1])
 
-        # For a linear kernel, witness at z is z times the difference between the means
+        # Linear kernel: z ⋅ (mean of all observations - mean of the prototypes)
         @test witness(x, k, [1]) ≈ (4.5 - 1) * x
         @test witness(x, k, [1, 2]) ≈ (4.5 - 1.5) * x
         @test witness(x, k, [1, 6]) ≈ zero(x)
         @test witness(x, k, [1], 2) ≈ (4.5 - 1) * 2
-
-        # For a linear kernel, witness at z is dot product of z with difference between the
-        # means
         @test witness(X, k, [1], ones(6)) ≈ dot(ones(6), (x .+ 0.5) - x)
         @test witness(X, k, [1], x) ≈ dot(x, (x .+ 0.5) - x)
 
