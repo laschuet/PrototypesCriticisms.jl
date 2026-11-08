@@ -26,7 +26,7 @@ using LinearAlgebra
         k = LinearKernel()
 
         @test sort(criticisms(x, k, [1], length(x) - 1)) == 2:6
-        @test sort(criticisms(X, k, [1], size(X, 2) - 1)) == 2:6
+        @test sort(criticisms(X', k, [1], size(X', 2) - 1)) == 2:6
 
         @test_throws ArgumentError criticisms(x, k, Int[], 0)
         @test_throws ArgumentError criticisms(x, k, Int[], length(x) + 1)
