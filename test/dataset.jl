@@ -2,6 +2,15 @@ using KernelFunctions
 using LinearAlgebra
 
 @testset "dataset" begin
+    @testset "prototypes_criticisms" begin
+        x = [1, 2, 3, 6, 7, 8]
+        X = [x x .+ 1]
+        k = LinearKernel()
+
+        @test_throws ArgumentError prototypes_criticisms(x, k, 0, 1)
+        @test_throws ArgumentError prototypes_criticisms(x, k, 1, 0)
+    end
+
     @testset "prototypes" begin
         x = [1, 2, 3, 6, 7, 8]
         X = [x x .+ 1]
