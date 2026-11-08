@@ -7,6 +7,10 @@ using LinearAlgebra
         X = [x x .+ 1]
         k = LinearKernel()
 
+        @test prototypes_criticisms(x, k) == ([3], [6])
+        @test prototypes_criticisms(x, k, 1, 2) == ([3], [6, 5])
+        @test prototypes_criticisms(X', k, 1, 2) == ([3], [6, 5])
+
         @test_throws ArgumentError prototypes_criticisms(x, k, 0, 1)
         @test_throws ArgumentError prototypes_criticisms(x, k, 1, 0)
     end
