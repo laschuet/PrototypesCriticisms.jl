@@ -2,6 +2,24 @@ using KernelFunctions
 using LinearAlgebra
 
 @testset "dataset" begin
+    @testset "prototypes" begin
+        x = [1, 2, 3, 6, 7, 8]
+        X = [x x .+ 1]
+        k = LinearKernel()
+
+        @test sort(prototypes(x, k, length(x))) == eachindex(x)
+        @test sort(prototypes(X, k, size(X, 2))) == eachindex(eachcol(X))
+
+        # Linear kernel: the first prototype is closest to the mean etc.
+        @test prototypes(x, k, 1) == [3]
+        @test prototypes(x, k, 2) == [3, 4]
+        @test prototypes(X', k, 1) == [3]
+        @test prototypes(X', k, 2) == [3, 4]
+
+        @test_throws ArgumentError prototypes(x, k, 0)
+        @test_throws ArgumentError prototypes(x, k, length(x) + 1)
+    end
+
     @testset "mmd2" begin
         x = [1, 2, 3, 6, 7, 8]
         X = [x x .+ 1]
