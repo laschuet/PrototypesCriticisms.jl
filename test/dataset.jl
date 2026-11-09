@@ -1,3 +1,4 @@
+using PrototypesCriticisms: check_kernelmatrix
 using KernelFunctions
 using LinearAlgebra
 
@@ -78,5 +79,11 @@ using LinearAlgebra
 
         @test_throws ArgumentError witness(x, k, Int[])
         @test_throws ArgumentError witness(x, k, Int[], 1)
+    end
+
+    @testset "check_kernelmatrix" begin
+        @test check_kernelmatrix([1 2; 2 1]) == 2
+        @test_throws DimensionMismatch check_kernelmatrix(ones(2, 3))
+        @test_throws ArgumentError check_kernelmatrix([1 2; 3 4])
     end
 end
