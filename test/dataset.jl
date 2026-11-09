@@ -22,7 +22,7 @@ using LinearAlgebra
 
     @testset "prototypes" begin
         @test sort(prototypes(x, k, length(x))) == eachindex(x)
-        @test sort(prototypes(X, k, size(X, 2))) == eachindex(eachcol(X))
+        @test sort(prototypes(X', k, size(X', 2))) == eachindex(eachcol(X'))
 
         # Linear kernel: the first prototype is closest to the mean etc.
         @test prototypes(x, k, 1) == [3]
@@ -42,9 +42,11 @@ using LinearAlgebra
         @test criticisms(x, k, [1], 1) == [6]
         @test criticisms(x, k, [1], 2) == [6, 5]
         @test criticisms(X', k, [1], 2) == [6, 5]
+        @test criticisms(x, k, [6], 2) == [5, 4]
 
-        @test_throws ArgumentError criticisms(x, k, Int[], 0)
-        @test_throws ArgumentError criticisms(x, k, Int[], length(x) + 1)
+        @test_throws ArgumentError criticisms(x, k, [1], 0)
+        @test_throws ArgumentError criticisms(x, k, [1], length(x))
+        @test_throws ArgumentError criticisms(x, k, Int[], 1)
     end
 
     @testset "mmd2" begin
@@ -56,6 +58,7 @@ using LinearAlgebra
         @test mmd2(x, k, [1]) ≈ (4.5 - 1)^2
         @test mmd2(x, k, [1, 2]) ≈ (4.5 - 1.5)^2
         @test mmd2(x, k, [1, 6]) ≈ 0
+        @test mmd2(X', k, [1]) ≈ (4.5 - 1)^2 + (5.5 - 2)^2
 
         @test_throws ArgumentError mmd2(x, k, Int[])
     end
