@@ -6,6 +6,11 @@ using LinearAlgebra
     X = [x x .+ 1]
     k = LinearKernel()
 
+    # For a linear kernel, mmd2 is the squared distance between the mean of all observations
+    # and the mean of the prototypes, and the witness at z is z ⋅ (mean of all observations
+    # - mean of the prototypes). The mean of x is 4.5, the mean of X is x .+ 0.5, i.e.,
+    # [1.5, 2.5, 3.5, 6.5, 7.5, 8.5], and the mean of X' is [4.5 5.5].
+
     @testset "prototypes_criticisms" begin
         @test prototypes_criticisms(x, k) == ([3], [6])
         @test prototypes_criticisms(x, k, 1, 2) == ([3], [6, 5])
@@ -48,7 +53,6 @@ using LinearAlgebra
 
         @test mmd2(x, k, [1, 2]) == mmd2(x, k, [2, 1])
 
-        # Linear kernel: squared distance between the means
         @test mmd2(x, k, [1]) ≈ (4.5 - 1)^2
         @test mmd2(x, k, [1, 2]) ≈ (4.5 - 1.5)^2
         @test mmd2(x, k, [1, 6]) ≈ 0
@@ -62,7 +66,6 @@ using LinearAlgebra
 
         @test witness(x, k, [1, 2]) == witness(x, k, [2, 1])
 
-        # Linear kernel: z ⋅ (mean of all observations - mean of the prototypes)
         @test witness(x, k, [1]) ≈ (4.5 - 1) * x
         @test witness(x, k, [1, 2]) ≈ (4.5 - 1.5) * x
         @test witness(x, k, [1, 6]) ≈ zero(x)
