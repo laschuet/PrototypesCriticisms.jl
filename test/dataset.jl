@@ -2,11 +2,11 @@ using KernelFunctions
 using LinearAlgebra
 
 @testset "dataset" begin
-    @testset "prototypes_criticisms" begin
-        x = [1, 2, 3, 6, 7, 8]
-        X = [x x .+ 1]
-        k = LinearKernel()
+    x = [1, 2, 3, 6, 7, 8]
+    X = [x x .+ 1]
+    k = LinearKernel()
 
+    @testset "prototypes_criticisms" begin
         @test prototypes_criticisms(x, k) == ([3], [6])
         @test prototypes_criticisms(x, k, 1, 2) == ([3], [6, 5])
         @test prototypes_criticisms(X', k, 1, 2) == ([3], [6, 5])
@@ -16,10 +16,6 @@ using LinearAlgebra
     end
 
     @testset "prototypes" begin
-        x = [1, 2, 3, 6, 7, 8]
-        X = [x x .+ 1]
-        k = LinearKernel()
-
         @test sort(prototypes(x, k, length(x))) == eachindex(x)
         @test sort(prototypes(X, k, size(X, 2))) == eachindex(eachcol(X))
 
@@ -34,10 +30,6 @@ using LinearAlgebra
     end
 
     @testset "criticisms" begin
-        x = [1, 2, 3, 6, 7, 8]
-        X = [x x .+ 1]
-        k = LinearKernel()
-
         @test sort(criticisms(x, k, [1], length(x) - 1)) == 2:6
         @test sort(criticisms(X', k, [1], size(X', 2) - 1)) == 2:6
 
@@ -51,10 +43,6 @@ using LinearAlgebra
     end
 
     @testset "mmd2" begin
-        x = [1, 2, 3, 6, 7, 8]
-        X = [x x .+ 1]
-        k = LinearKernel()
-
         @test mmd2(x, k, eachindex(x)) ≈ 0
         @test mmd2(X, k, eachindex(eachcol(X))) ≈ 0
 
@@ -69,10 +57,6 @@ using LinearAlgebra
     end
 
     @testset "witness" begin
-        x = [1, 2, 3, 6, 7, 8]
-        X = [x x .+ 1]
-        k = LinearKernel()
-
         @test witness(x, k, eachindex(x)) ≈ zero(x)
         @test witness(X, k, eachindex(eachcol(X))) ≈ zeros(size(X, 2))
 
