@@ -10,7 +10,7 @@ function prototypes(C::Union{KmeansResult, KmedoidsResult}, p::Int = 1)
 end
 
 """
-    criticisms(C, p=1)
+    criticisms(C, c=1)
 
 Compute the criticisms of every cluster of the clustering `C` with the centroid-based method
 and return their indices, one vector per cluster.
