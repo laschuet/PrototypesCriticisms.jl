@@ -1,8 +1,10 @@
 """
     prototypes(C, p=1)
 
-Compute the prototypes of every cluster of the clustering `C` with the centroid-based method
-and return their indices, one vector per cluster.
+Compute the `p` prototypes of every cluster of the k-means or k-medoids clustering `C` with
+the centroid-based method, and return their indices, one vector per cluster.
+
+See also [`criticisms`](@ref).
 """
 function prototypes(C::Union{KmeansResult, KmedoidsResult}, p::Int = 1)
     1 <= p || throw(ArgumentError("p must satisfy 1 <= p, got p = $p"))
@@ -12,8 +14,10 @@ end
 """
     criticisms(C, c=1)
 
-Compute the criticisms of every cluster of the clustering `C` with the centroid-based method
-and return their indices, one vector per cluster.
+Compute the `c` criticisms of every cluster of the k-means or k-medoids clustering `C` with
+the centroid-based method, and return their indices, one vector per cluster.
+
+See also [`prototypes`](@ref).
 """
 function criticisms(C::Union{KmeansResult, KmedoidsResult}, c::Int = 1)
     1 <= c || throw(ArgumentError("c must satisfy 1 <= c, got c = $c"))
@@ -21,10 +25,10 @@ function criticisms(C::Union{KmeansResult, KmedoidsResult}, c::Int = 1)
 end
 
 """
-    sortedmembers(C, c, rev=false)
+    sortedmembers(C, c; rev=false)
 
-Return the indices of the observations in cluster `c` of the clustering `C`, sorted by their
-assignment costs. Observations with equal assignment costs keep the order of their indices.
+Return the indices of the observations in cluster `c` of the clustering `C`, sorted by
+increasing assignment costs, or by decreasing costs if `rev` is `true`.
 """
 function sortedmembers(C::Union{KmeansResult, KmedoidsResult}, c::Int; rev::Bool = false)
     members = findall(==(c), assignments(C))
