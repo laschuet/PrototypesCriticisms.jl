@@ -3,20 +3,22 @@
     prototypes_criticisms(X, k, p=1, c=1)
     prototypes_criticisms(K, p=1, c=1)
 
-Compute prototypes and criticisms following the MMD-critic method and return
-a tuple of the indices of the prototypes and the indices of the criticisms.
+Compute prototypes and criticisms of a data set with the MMD-critic method, and return a
+tuple of the indices of the prototypes and the indices of the criticisms.
 
-The data can be given in the following forms:
-- `x::AbstractVector`: a vector of observations, e.g., a vector of vectors or a vector of
-    numbers for one-dimensional data.
-- `X::AbstractMatrix{<:Real}`: a data matrix, with one observation per column.
-- `K::AbstractMatrix{<:Real}`: a precomputed kernel matrix. Only squareness and symmetry are
-    checked.
+The prototypes are computed with [`prototypes`](@ref), and the criticisms are computed
+with [`criticisms`](@ref).
 
-For `x` and `X`, the kernel matrix is computed with the kernel function `k`.
-
-The numbers of prototypes `p` and criticisms `c` are passed on to [`prototypes`](@ref) and
-[`criticisms`](@ref).
+# Arguments
+- `x::AbstractVector`: the observations, e.g., a vector of vectors or a vector of numbers
+    for one-dimensional data.
+- `X::AbstractMatrix{<:Real}`: the data matrix, with one observation per column.
+- `K::AbstractMatrix{<:Real}`: the precomputed kernel matrix. Only squareness and symmetry
+    are checked.
+- `k::Kernel`: the kernel function for computing the kernel matrix of `x` or `X`.
+- `p::Int=1`: the number of prototypes, with `1 <= p <= n` for `n` observations.
+- `c::Int=1`: the number of criticisms, with `1 <= c <= n - p` for `n` observations and
+    `p` prototypes.
 """
 function prototypes_criticisms end
 
@@ -37,14 +39,14 @@ end
     prototypes(X, k, p=1)
     prototypes(K, p=1)
 
-Compute prototypes following the MMD-critic method and return their indices.
+Compute prototypes of a data set following the MMD-critic method, and return their indices.
 
-The data `x`, `X`, or `K` and the kernel `k` are as in [`prototypes_criticisms`](@ref).
+# Arguments
+- `x`, `X`, `K`, `k`: the data and the kernel function, as in
+    [`prototypes_criticisms`](@ref).
+- `p::Int=1`: the number of prototypes, with `1 <= p <= n` for `n` observations.
 
-The remaining argument is:
-- `p::Int`: the number of prototypes to compute, with `1 <= p <= n` for `n` observations.
-
-See also [`criticisms`](@ref).
+See also [`criticisms`](@ref), [`prototypes_criticisms`](@ref).
 """
 function prototypes end
 
@@ -79,14 +81,17 @@ end
     criticisms(X, k, protos, c=1)
     criticisms(K, protos, c=1)
 
-Compute criticisms following the MMD-critic method and return their indices.
+Compute criticisms of a data set following the MMD-critic method, and return their indices.
 
-The data `x`, `X`, or `K` and the kernel `k` are as in [`prototypes_criticisms`](@ref).
+# Arguments
+- `x`, `X`, `K`, `k`: the data and the kernel function, as in
+    [`prototypes_criticisms`](@ref).
+- `protos::AbstractVector{Int}`: the indices of the prototypes, e.g., as returned by
+    [`prototypes`](@ref).
+- `c::Int=1`: the number of criticisms, with `1 <= c <= n - p` for `n` observations and `p`
+    distinct prototypes.
 
-The remaining arguments are:
-- `protos::AbstractVector{Int}`: the prototypes, e.g., as returned by [`prototypes`](@ref).
-- `c::Int`: the number of criticisms to compute, with `1 <= c <= n - p` for `n` observations
-    and `p` distinct prototypes.
+See also [`prototypes`](@ref), [`prototypes_criticisms`](@ref).
 """
 function criticisms end
 
@@ -117,12 +122,15 @@ end
     mmd2(X, k, protos)
     mmd2(K, protos)
 
-Compute the squared maximum mean discrepancy (MMD) between the data and prototypes.
+Compute the squared maximum mean discrepancy (MMD) between a data set and its prototypes.
 
-The data `x`, `X`, or `K` and the kernel `k` are as in [`prototypes_criticisms`](@ref).
+# Arguments
+- `x`, `X`, `K`, `k`: the data and the kernel function, as in
+    [`prototypes_criticisms`](@ref).
+- `protos::AbstractVector{Int}`: the indices of the prototypes, e.g., as returned by
+    [`prototypes`](@ref).
 
-The remaining argument is:
-- `protos::AbstractVector{Int}`: the prototypes, e.g., as returned by [`prototypes`](@ref).
+See also [`witness`](@ref).
 """
 function mmd2 end
 
@@ -145,14 +153,18 @@ end
     witness(x, k, protos, z)
     witness(X, k, protos, z)
 
-Compute the witness function for every observation, or only at `z` if given.
+Compute the witness function of a data set and its prototypes, and return its values at all
+observations, or its value at `z` if given.
 
-The data `x`, `X`, or `K` and the kernel `k` are as in [`prototypes_criticisms`](@ref).
-
-The remaining arguments are:
-- `protos::AbstractVector{Int}`: the prototypes, e.g., as returned by [`prototypes`](@ref).
+# Arguments
+- `x`, `X`, `K`, `k`: the data and the kernel function, as in
+    [`prototypes_criticisms`](@ref).
+- `protos::AbstractVector{Int}`: the indices of the prototypes, e.g., as returned by
+    [`prototypes`](@ref).
 - `z`: a single observation, which does not need to be part of the data, e.g., an element of
     `x` or a column of `X`.
+
+See also [`criticisms`](@ref), [`mmd2`](@ref).
 """
 function witness end
 
