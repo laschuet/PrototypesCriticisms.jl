@@ -26,7 +26,7 @@ end
 Return the indices of the observations in cluster `c` of the clustering `C`, sorted by their
 assignment costs. Observations with equal assignment costs keep the order of their indices.
 """
-function sortedmembers(C::Union{KmeansResult, KmedoidsResult}, c::Int, rev::Bool = false)
+function sortedmembers(C::Union{KmeansResult, KmedoidsResult}, c::Int; rev::Bool = false)
     members = findall(==(c), assignments(C))
     return members[sortperm(C.costs[members], rev = rev)]
 end
