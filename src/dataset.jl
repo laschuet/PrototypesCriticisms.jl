@@ -60,7 +60,7 @@ prototypes(X::AbstractMatrix{<:Real}, k::Kernel, p::Int = 1) =
     prototypes(kernelmatrix(k, X, obsdim = 2), p)
 
 function prototypes(K::AbstractMatrix{<:Real}, p::Int = 1)
-    n = check_kernelmatrix(K)
+    n = checksymmetric(K)
     1 <= p <= n || throw(ArgumentError("p must satisfy 1 <= p <= $n, got p = $p"))
     doubled_kernel_means = 2 * mean(K, dims = 1)
     kernel_diag = diag(K)
@@ -110,7 +110,7 @@ criticisms(X::AbstractMatrix{<:Real}, k::Kernel, protos::AbstractVector{Int}, c:
     criticisms(kernelmatrix(k, X, obsdim = 2), protos, c)
 
 function criticisms(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int}, c::Int = 1)
-    n = check_kernelmatrix(K)
+    n = checksymmetric(K)
     initial_candidates = setdiff(1:n, protos)
     max_c = length(initial_candidates)
     1 <= c <= max_c || throw(ArgumentError("c must satisfy 1 <= c <= $max_c, got c = $c"))
@@ -152,7 +152,7 @@ mmd2(X::AbstractMatrix{<:Real}, k::Kernel, protos::AbstractVector{Int}) =
     mmd2(kernelmatrix(k, X, obsdim = 2), protos)
 
 function mmd2(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int})
-    check_kernelmatrix(K)
+    checksymmetric(K)
     isempty(protos) && throw(ArgumentError("protos must not be empty"))
     return mean(K) - 2 * mean(K[:, protos]) + mean(K[protos, protos])
 end
@@ -191,7 +191,7 @@ witness(X::AbstractMatrix{<:Real}, k::Kernel, protos::AbstractVector{Int}) =
     witness(kernelmatrix(k, X, obsdim = 2), protos)
 
 function witness(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int})
-    check_kernelmatrix(K)
+    checksymmetric(K)
     isempty(protos) && throw(ArgumentError("protos must not be empty"))
     return vec(mean(K, dims = 1) - mean(K[protos, :], dims = 1))
 end
@@ -209,7 +209,7 @@ witness(X::AbstractMatrix{<:Real}, k::Kernel, protos::AbstractVector{Int}, z) =
 
 Check that the matrix `K` is square and symmetric, and return the number of observations.
 """
-function check_kernelmatrix(K::AbstractMatrix{<:Real})
+function checksymmetric(K::AbstractMatrix{<:Real})
     n = size(K, 1)
     size(K, 2) == n || throw(DimensionMismatch("K must be square, got size $(size(K))"))
     issymmetric(K) || throw(ArgumentError("K must be symmetric"))
