@@ -41,6 +41,10 @@ end
 
 Compute prototypes of a data set following the MMD-critic method, and return their indices.
 
+The prototypes are selected one after another. Every selection minimizes the squared maximum
+mean discrepancy between the data and the prototypes selected so far, see [`mmd2`](@ref).
+Ties are broken in favor of the lower index.
+
 # Arguments
 - `x`, `X`, `K`, `k`: the data and the kernel function, as in
     [`prototypes_criticisms`](@ref).
@@ -83,6 +87,10 @@ end
 
 Compute criticisms of a data set following the MMD-critic method, and return their indices.
 
+The criticisms are the observations other than the prototypes with the largest absolute
+values of the [`witness`](@ref) function, in decreasing order of these values. Ties are
+broken in favor of the lower index.
+
 # Arguments
 - `x`, `X`, `K`, `k`: the data and the kernel function, as in
     [`prototypes_criticisms`](@ref).
@@ -124,6 +132,9 @@ end
 
 Compute the squared maximum mean discrepancy (MMD) between a data set and its prototypes.
 
+The lower the value, the better the prototypes represent the data. It is zero if all
+observations are prototypes.
+
 # Arguments
 - `x`, `X`, `K`, `k`: the data and the kernel function, as in
     [`prototypes_criticisms`](@ref).
@@ -155,6 +166,11 @@ end
 
 Compute the witness function of a data set and its prototypes, and return its values at all
 observations, or its value at `z` if given.
+
+The witness function at an observation is the mean kernel value between the observation and
+the data minus the mean kernel value between the observation and the prototypes. Positive
+values indicate that the prototypes underrepresent the data around the observation, and
+negative values that they overrepresent it.
 
 # Arguments
 - `x`, `X`, `K`, `k`: the data and the kernel function, as in
