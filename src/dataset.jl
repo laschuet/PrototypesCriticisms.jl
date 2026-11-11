@@ -205,7 +205,7 @@ witness(X::AbstractMatrix{<:Real}, k::Kernel, protos::AbstractVector{Int}, z) =
     witness(eachcol(X), k, protos, z)
 
 """
-    check_kernelmatrix(K)
+    checksymmetric(K)
 
 Check that the matrix `K` is square and symmetric, and return the number of observations.
 """
