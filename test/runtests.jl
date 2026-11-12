@@ -5,4 +5,5 @@ using Test
     include("clustering.jl")
     include("dataset.jl")
     include("ranking.jl")
+    include("utils.jl")
 end

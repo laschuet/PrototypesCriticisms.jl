@@ -31,15 +31,3 @@ function criticisms(C::Union{KmeansResult, KmedoidsResult}, c::Int = 1)
     1 <= c || throw(ArgumentError("c must satisfy 1 <= c, got c = $c"))
     return [first(sortedmembers(C, i, rev = true), c) for i in 1:nclusters(C)]
 end
-
-"""
-    sortedmembers(C, c; rev=false)
-
-Return the indices of the observations in cluster `c` of the clustering `C`, sorted by
-increasing assignment costs, or by decreasing costs if `rev` is `true`. Observations with
-equal costs keep the order of their indices.
-"""
-function sortedmembers(C::Union{KmeansResult, KmedoidsResult}, c::Int; rev::Bool = false)
-    members = findall(==(c), assignments(C))
-    return members[sortperm(C.costs[members], rev = rev)]
-end
