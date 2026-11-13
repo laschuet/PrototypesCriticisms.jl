@@ -12,12 +12,19 @@ end
 
 """
     sortedmembers(C, c; rev=false)
+    sortedmembers(assignments, costs, c; rev=false)
 
 Return the indices of the observations in cluster `c` of the clustering `C`, sorted by
 increasing assignment costs, or by decreasing costs if `rev` is `true`. Observations with
 equal costs keep the order of their indices.
 """
-function sortedmembers(C::Union{KmeansResult, KmedoidsResult}, c::Int; rev::Bool = false)
-    members = findall(==(c), assignments(C))
-    return members[sortperm(C.costs[members], rev = rev)]
+sortedmembers(C::Union{KmeansResult, KmedoidsResult}, c::Int; rev::Bool = false) =
+    sortedmembers(assignments(C), C.costs, c, rev = rev)
+
+function sortedmembers(
+        assignments::AbstractVector{<:Integer},
+        costs::AbstractVector{<:Real}, c::Int; rev::Bool = false
+    )
+    members = findall(==(c), assignments)
+    return members[sortperm(costs[members], rev = rev)]
 end
