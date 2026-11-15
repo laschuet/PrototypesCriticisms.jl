@@ -37,6 +37,9 @@ mean of its cluster in `assignments`.
 """
 function centroidcosts(assignments::AbstractVector{<:Integer}, X::AbstractMatrix{<:Real})
     n = size(X, 2)
+    length(assignments) == n || throw(
+        DimensionMismatch("got $(length(assignments)) assignments for $n observations"),
+    )
     costs = zeros(n)
     for c in unique(assignments)
         members = findall(==(c), assignments)
