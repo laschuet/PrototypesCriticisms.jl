@@ -1,4 +1,4 @@
-using PrototypesCriticisms: checksymmetric, sortedmembers
+using PrototypesCriticisms: checksymmetric, centroidcosts, sortedmembers
 using Clustering
 
 @testset "utils" begin
@@ -26,5 +26,10 @@ using Clustering
             rev = true
         ) == [1, 3, 2]
         @test sortedmembers([1, 1, 1, 2, 2, 2], [1.0, 0.0, 1.0, 1.0, 0.0, 1.0], 3) == []
+    end
+
+    @testset "centroidcosts" begin
+        @test centroidcosts([1, 1, 1, 2, 2, 2], [1 2 3 6 7 8]) == [1, 0, 1, 1, 0, 1]
+        @test centroidcosts([1, 1], [0 2; 0 2]) == [2, 2]
     end
 end

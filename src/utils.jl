@@ -28,3 +28,20 @@ function sortedmembers(
     members = findall(==(c), assignments)
     return members[sortperm(costs[members], rev = rev)]
 end
+
+"""
+    centroidcosts(assignments, X)
+
+Return the squared Euclidean distance of every observation in the data matrix `X` to the
+mean of its cluster in `assignments`.
+"""
+function centroidcosts(assignments::AbstractVector{<:Integer}, X::AbstractMatrix{<:Real})
+    n = size(X, 2)
+    costs = zeros(n)
+    for c in unique(assignments)
+        members = findall(==(c), assignments)
+        centroid = vec(mean(X[:, members], dims = 2))
+        costs[members] = colwise(SqEuclidean(), X[:, members], centroid)
+    end
+    return costs
+end
