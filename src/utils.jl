@@ -33,12 +33,12 @@ function sortedmembers(
 end
 
 """
-    centroidcosts(assignments, X)
+    centroidcosts(X, assignments)
 
 Return the squared Euclidean distance of every observation in the data matrix `X` to the
 mean of its cluster in `assignments`.
 """
-function centroidcosts(assignments::AbstractVector{<:Integer}, X::AbstractMatrix{<:Real})
+function centroidcosts(X::AbstractMatrix{<:Real}, assignments::AbstractVector{<:Integer})
     n = size(X, 2)
     length(assignments) == n || throw(
         DimensionMismatch("got $(length(assignments)) assignments for $n observations"),
