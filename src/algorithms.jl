@@ -6,7 +6,7 @@ Supertype of the methods for computing prototypes and criticisms.
 abstract type Algorithm end
 
 """
-    MMDCritic(k=SqExponentialKernel)
+    MMDCritic(k=SqExponentialKernel())
     MMDCritic(nothing)
 
 The MMD-critic method with the kernel function `k`.
