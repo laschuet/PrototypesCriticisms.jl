@@ -1,4 +1,14 @@
 """
+    prototypes_criticisms(alg, C, p=1, c=1)
+    prototypes_criticisms(alg, X, assignments, p=1, c=1)
+
+Compute the `p` prototypes and the `c` criticisms of every cluster with the centroid-based
+method, and return a tuple of the indices of the prototypes and the indices of the
+criticisms, each with one vector per cluster.
+
+The clusters are given by `C`, or by `X` and `assignments` as in [`prototypes`](@ref). The
+prototypes are computed with [`prototypes`](@ref), and the criticisms are computed with
+[`criticisms`](@ref).
 """
 prototypes_criticisms(
     alg::Centroid, C::Union{KmeansResult, KmedoidsResult}, p::Int = 1, c::Int = 1
