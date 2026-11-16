@@ -1,7 +1,7 @@
 """
-    prototypes_criticisms(x, k, p=1, c=1)
-    prototypes_criticisms(X, k, p=1, c=1)
-    prototypes_criticisms(K, p=1, c=1)
+    prototypes_criticisms(alg, x, p=1, c=1)
+    prototypes_criticisms(alg, X, p=1, c=1)
+    prototypes_criticisms(alg, K, p=1, c=1)
 
 Compute prototypes and criticisms of a data set with the MMD-critic method, and return a
 tuple of the indices of the prototypes and the indices of the criticisms.
@@ -10,34 +10,39 @@ The prototypes are computed with [`prototypes`](@ref), and the criticisms are co
 with [`criticisms`](@ref).
 
 # Arguments
+- `alg::MMDCritic`: the method with its kernel function, or with `nothing` for the
+    precomputed kernel matrix `K`.
 - `x::AbstractVector`: the observations, e.g., a vector of vectors or a vector of numbers
     for one-dimensional data.
 - `X::AbstractMatrix{<:Real}`: the data matrix, with one observation per column.
 - `K::AbstractMatrix{<:Real}`: the precomputed kernel matrix. Only squareness and symmetry
     are checked.
-- `k::Kernel`: the kernel function for computing the kernel matrix of `x` or `X`.
 - `p::Int=1`: the number of prototypes, with `1 <= p <= n` for `n` observations.
 - `c::Int=1`: the number of criticisms, with `1 <= c <= n - p` for `n` observations and
     `p` prototypes.
 """
 function prototypes_criticisms end
 
-prototypes_criticisms(x::AbstractVector, k::Kernel, p::Int = 1, c::Int = 1) =
-    prototypes_criticisms(kernelmatrix(k, x), p, c)
+prototypes_criticisms(alg::MMDCritic{<:Kernel}, x::AbstractVector, p::Int = 1, c::Int = 1) =
+    prototypes_criticisms(MMDCritic(nothing), kernelmatrix(alg.k, x), p, c)
 
-prototypes_criticisms(X::AbstractMatrix{<:Real}, k::Kernel, p::Int = 1, c::Int = 1) =
-    prototypes_criticisms(kernelmatrix(k, X, obsdim = 2), p, c)
+prototypes_criticisms(
+    alg::MMDCritic{<:Kernel}, X::AbstractMatrix{<:Real}, p::Int = 1, c::Int = 1
+) =
+    prototypes_criticisms(MMDCritic(nothing), kernelmatrix(alg.k, X, obsdim = 2), p, c)
 
-function prototypes_criticisms(K::AbstractMatrix{<:Real}, p::Int = 1, c::Int = 1)
-    protos = prototypes(K, p)
-    critics = criticisms(K, protos, c)
+function prototypes_criticisms(
+        alg::MMDCritic{Nothing}, K::AbstractMatrix{<:Real}, p::Int = 1, c::Int = 1
+    )
+    protos = prototypes(alg, K, p)
+    critics = criticisms(alg, K, protos, c)
     return protos, critics
 end
 
 """
-    prototypes(x, k, p=1)
-    prototypes(X, k, p=1)
-    prototypes(K, p=1)
+    prototypes(alg, x, p=1)
+    prototypes(alg, X, p=1)
+    prototypes(alg, K, p=1)
 
 Compute prototypes of a data set following the MMD-critic method, and return their indices.
 
@@ -46,20 +51,20 @@ mean discrepancy between the data and the prototypes selected so far, see [`mmd2
 Ties are broken in favor of the lower index.
 
 # Arguments
-- `x`, `X`, `K`, `k`: the data and the kernel function, as in
-    [`prototypes_criticisms`](@ref).
+- `alg`, `x`, `X`, `K`: the method and the data, as in [`prototypes_criticisms`](@ref).
 - `p::Int=1`: the number of prototypes, with `1 <= p <= n` for `n` observations.
 
 See also [`criticisms`](@ref), [`prototypes_criticisms`](@ref).
 """
 function prototypes end
 
-prototypes(x::AbstractVector, k::Kernel, p::Int = 1) = prototypes(kernelmatrix(k, x), p)
+prototypes(alg::MMDCritic{<:Kernel}, x::AbstractVector, p::Int = 1) =
+    prototypes(MMDCritic(nothing), kernelmatrix(alg.k, x), p)
 
-prototypes(X::AbstractMatrix{<:Real}, k::Kernel, p::Int = 1) =
-    prototypes(kernelmatrix(k, X, obsdim = 2), p)
+prototypes(alg::MMDCritic{<:Kernel}, X::AbstractMatrix{<:Real}, p::Int = 1) =
+    prototypes(MMDCritic(nothing), kernelmatrix(alg.k, X, obsdim = 2), p)
 
-function prototypes(K::AbstractMatrix{<:Real}, p::Int = 1)
+function prototypes(::MMDCritic{Nothing}, K::AbstractMatrix{<:Real}, p::Int = 1)
     n = checksymmetric(K)
     1 <= p <= n || throw(ArgumentError("p must satisfy 1 <= p <= $n, got p = $p"))
     doubled_kernel_means = 2 * mean(K, dims = 1)
@@ -81,9 +86,9 @@ function prototypes(K::AbstractMatrix{<:Real}, p::Int = 1)
 end
 
 """
-    criticisms(x, k, protos, c=1)
-    criticisms(X, k, protos, c=1)
-    criticisms(K, protos, c=1)
+    criticisms(alg, x, protos, c=1)
+    criticisms(alg, X, protos, c=1)
+    criticisms(alg, K, protos, c=1)
 
 Compute criticisms of a data set following the MMD-critic method, and return their indices.
 
@@ -103,13 +108,21 @@ See also [`prototypes`](@ref), [`prototypes_criticisms`](@ref).
 """
 function criticisms end
 
-criticisms(x::AbstractVector, k::Kernel, protos::AbstractVector{Int}, c::Int = 1) =
-    criticisms(kernelmatrix(k, x), protos, c)
+criticisms(
+    alg::MMDCritic{<:Kernel}, x::AbstractVector, protos::AbstractVector{Int}, c::Int = 1
+) =
+    criticisms(MMDCritic(nothing), kernelmatrix(alg.k, x), protos, c)
 
-criticisms(X::AbstractMatrix{<:Real}, k::Kernel, protos::AbstractVector{Int}, c::Int = 1) =
-    criticisms(kernelmatrix(k, X, obsdim = 2), protos, c)
+criticisms(
+    alg::MMDCritic{<:Kernel}, X::AbstractMatrix{<:Real}, protos::AbstractVector{Int},
+    c::Int = 1
+) =
+    criticisms(MMDCritic(nothing), kernelmatrix(alg.k, X, obsdim = 2), protos, c)
 
-function criticisms(K::AbstractMatrix{<:Real}, protos::AbstractVector{Int}, c::Int = 1)
+function criticisms(
+        ::MMDCritic{Nothing}, K::AbstractMatrix{<:Real}, protos::AbstractVector{Int},
+        c::Int = 1
+    )
     n = checksymmetric(K)
     initial_candidates = setdiff(1:n, protos)
     max_c = length(initial_candidates)
@@ -136,8 +149,8 @@ The lower the value, the better the prototypes represent the data. It is zero if
 observations are prototypes.
 
 # Arguments
-- `x`, `X`, `K`, `k`: the data and the kernel function, as in
-    [`prototypes_criticisms`](@ref).
+- `x`, `X`, `K`: the data, as in [`prototypes_criticisms`](@ref).
+- `k::Kernel`: the kernel function for computing the kernel matrix of `x` or `X`. 
 - `protos::AbstractVector{Int}`: the indices of the prototypes, e.g., as returned by
     [`prototypes`](@ref).
 
@@ -173,8 +186,8 @@ values indicate that the prototypes underrepresent the data around the observati
 negative values that they overrepresent it.
 
 # Arguments
-- `x`, `X`, `K`, `k`: the data and the kernel function, as in
-    [`prototypes_criticisms`](@ref).
+- `x`, `X`, `K`: the data, as in [`prototypes_criticisms`](@ref).
+- `k::Kernel`: the kernel function for computing the kernel matrix of `x` or `X`. 
 - `protos::AbstractVector{Int}`: the indices of the prototypes, e.g., as returned by
     [`prototypes`](@ref).
 - `z`: a single observation, which does not need to be part of the data, e.g., an element of

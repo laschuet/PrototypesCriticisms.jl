@@ -5,6 +5,8 @@ using LinearAlgebra
     x = [1, 2, 3, 6, 7, 8]
     X = [x x .+ 1]
     k = LinearKernel()
+    K = kernelmatrix(k, x)
+    alg = MMDCritic(k)
 
     # For a linear kernel, mmd2 is the squared distance between the mean of all observations
     # and the mean of the prototypes, and the witness at z is z ⋅ (mean of all observations
@@ -12,41 +14,44 @@ using LinearAlgebra
     # [1.5, 2.5, 3.5, 6.5, 7.5, 8.5], and the mean of X' is [4.5 5.5].
 
     @testset "prototypes_criticisms" begin
-        @test prototypes_criticisms(x, k) == ([3], [6])
-        @test prototypes_criticisms(x, k, 1, 2) == ([3], [6, 5])
-        @test prototypes_criticisms(X', k, 1, 2) == ([3], [6, 5])
+        @test prototypes_criticisms(alg, x) == ([3], [6])
+        @test prototypes_criticisms(alg, x, 1, 2) == ([3], [6, 5])
+        @test prototypes_criticisms(alg, X', 1, 2) == ([3], [6, 5])
+        @test prototypes_criticisms(MMDCritic(nothing), K, 1, 2) == ([3], [6, 5])
 
-        @test_throws ArgumentError prototypes_criticisms(x, k, 0, 1)
-        @test_throws ArgumentError prototypes_criticisms(x, k, 1, 0)
+        @test_throws ArgumentError prototypes_criticisms(alg, x, 0, 1)
+        @test_throws ArgumentError prototypes_criticisms(alg, x, 1, 0)
     end
 
     @testset "prototypes" begin
-        @test sort(prototypes(x, k, length(x))) == eachindex(x)
-        @test sort(prototypes(X', k, size(X', 2))) == eachindex(eachcol(X'))
+        @test sort(prototypes(alg, x, length(x))) == eachindex(x)
+        @test sort(prototypes(alg, X', size(X', 2))) == eachindex(eachcol(X'))
 
         # Linear kernel: the first prototype is closest to the mean etc.
-        @test prototypes(x, k, 1) == [3]
-        @test prototypes(x, k, 2) == [3, 4]
-        @test prototypes(X', k, 1) == [3]
-        @test prototypes(X', k, 2) == [3, 4]
+        @test prototypes(alg, x, 1) == [3]
+        @test prototypes(alg, x, 2) == [3, 4]
+        @test prototypes(alg, X', 1) == [3]
+        @test prototypes(alg, X', 2) == [3, 4]
+        @test prototypes(MMDCritic(nothing), K, 2) == [3, 4]
 
-        @test_throws ArgumentError prototypes(x, k, 0)
-        @test_throws ArgumentError prototypes(x, k, length(x) + 1)
+        @test_throws ArgumentError prototypes(alg, x, 0)
+        @test_throws ArgumentError prototypes(alg, x, length(x) + 1)
     end
 
     @testset "criticisms" begin
-        @test sort(criticisms(x, k, [1], length(x) - 1)) == 2:6
-        @test sort(criticisms(X', k, [1], size(X', 2) - 1)) == 2:6
+        @test sort(criticisms(alg, x, [1], length(x) - 1)) == 2:6
+        @test sort(criticisms(alg, X', [1], size(X', 2) - 1)) == 2:6
 
         # Linear kernel: the criticisms have the largest absolute witness values
-        @test criticisms(x, k, [1], 1) == [6]
-        @test criticisms(x, k, [1], 2) == [6, 5]
-        @test criticisms(X', k, [1], 2) == [6, 5]
-        @test criticisms(x, k, [6], 2) == [5, 4]
+        @test criticisms(alg, x, [1], 1) == [6]
+        @test criticisms(alg, x, [1], 2) == [6, 5]
+        @test criticisms(alg, X', [1], 2) == [6, 5]
+        @test criticisms(alg, x, [6], 2) == [5, 4]
+        @test criticisms(MMDCritic(nothing), K, [1], 2) == [6, 5]
 
-        @test_throws ArgumentError criticisms(x, k, [1], 0)
-        @test_throws ArgumentError criticisms(x, k, [1], length(x))
-        @test_throws ArgumentError criticisms(x, k, Int[], 1)
+        @test_throws ArgumentError criticisms(alg, x, [1], 0)
+        @test_throws ArgumentError criticisms(alg, x, [1], length(x))
+        @test_throws ArgumentError criticisms(alg, x, Int[], 1)
     end
 
     @testset "mmd2" begin
