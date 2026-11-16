@@ -1,4 +1,15 @@
 """
+"""
+prototypes_criticisms(
+    alg::Centroid, C::Union{KmeansResult, KmedoidsResult}, p::Int = 1, c::Int = 1
+) = prototypes(alg, C, p), criticisms(alg, C, c)
+
+prototypes_criticisms(
+    alg::Centroid, X::AbstractMatrix{<:Real}, assignments::AbstractVector{<:Integer},
+    p::Int = 1, c::Int = 1
+) = prototypes(alg, X, assignments, p), criticisms(alg, X, assignments, c)
+
+"""
     prototypes(alg, C, p=1)
     prototypes(alg, X, assignments, p=1)
 
