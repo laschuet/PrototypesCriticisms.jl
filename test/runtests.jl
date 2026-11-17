@@ -1,5 +1,6 @@
 using PrototypesCriticisms
-using PrototypesCriticisms: Algorithm, checksymmetric, centroidcosts, sortedmembers
+using PrototypesCriticisms: Algorithm, checksymmetric, centroidcosts, clustermembers,
+    sortedmembers
 using Clustering
 using Distances
 using KernelFunctions

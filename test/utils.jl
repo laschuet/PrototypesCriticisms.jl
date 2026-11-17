@@ -31,4 +31,10 @@
 
         @test_throws DimensionMismatch centroidcosts([1 2 3], [1, 1])
     end
+
+    @testset "clustermembers" begin
+        @test clustermembers([1, 1, 2, 2]) == [[1, 2], [3, 4]]
+        @test clustermembers([5, 2, 5, 2]) == [[2, 4], [1, 3]]
+        @test clustermembers(Int[]) == []
+    end
 end

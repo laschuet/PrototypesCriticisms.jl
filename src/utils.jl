@@ -51,3 +51,12 @@ function centroidcosts(X::AbstractMatrix{<:Real}, assignments::AbstractVector{<:
     end
     return costs
 end
+
+"""
+    clustermembers(assignments)
+
+Return the indices of the observations of every cluster in `assignments`, one vector per
+cluster, ordered by increasing "label".
+"""
+clustermembers(assignments::AbstractVector{<:Integer}) =
+    [findall(==(c), assignments) for c in sort(unique(assignments))]
