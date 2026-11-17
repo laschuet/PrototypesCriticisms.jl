@@ -1,6 +1,3 @@
-using PrototypesCriticisms: checksymmetric, centroidcosts, sortedmembers
-using Clustering
-
 @testset "utils" begin
     @testset "checksymmetric" begin
         @test checksymmetric([1 2; 2 1]) == 2

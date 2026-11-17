@@ -1,5 +1,13 @@
 using PrototypesCriticisms
+using PrototypesCriticisms: Algorithm, checksymmetric, centroidcosts, sortedmembers
+using Clustering
+using Distances
+using KernelFunctions
+using LinearAlgebra
+using Random
 using Test
+
+Random.seed!(42)
 
 @testset "PrototypesCriticisms.jl" begin
     include("algorithms.jl")

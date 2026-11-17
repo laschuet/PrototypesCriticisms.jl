@@ -1,8 +1,3 @@
-using Distances
-using Random
-
-Random.seed!(42)
-
 @testset "ranking" begin
     observed_ranking = [11, 22, 33, 44, 55, 66]
     ranking_1 = [22, 11, 33, 44, 66, 55]

@@ -1,6 +1,3 @@
-using KernelFunctions
-using LinearAlgebra
-
 @testset "dataset" begin
     x = [1, 2, 3, 6, 7, 8]
     X = [x x .+ 1]

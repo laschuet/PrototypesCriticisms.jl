@@ -1,6 +1,3 @@
-using KernelFunctions
-using PrototypesCriticisms: Algorithm
-
 @testset "algorithms" begin
     @testset "MMDCritic" begin
         @test MMDCritic() isa Algorithm
